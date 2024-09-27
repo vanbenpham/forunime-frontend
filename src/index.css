@@ -1,0 +1,53 @@
+/* reset.css */
+
+/* Remove default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set a consistent font */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  background-color: rgb(3, 3, 3, 0.75);
+}
+
+/* Remove list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Set a consistent image display */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Set a default link color */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Set a consistent button style */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Make sure all form inputs have consistent styling */
+input, textarea, select {
+  font: inherit;
+  margin: 0;
+}
+
+/* Responsive typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+}
+
+/* Add any additional resets or styles as needed */
