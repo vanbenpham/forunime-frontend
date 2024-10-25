@@ -150,7 +150,7 @@ const Settings: React.FC = () => {
           localStorage.removeItem(USER_STORAGE_KEY);
           localStorage.removeItem('token');
           sessionStorage.clear();
-          navigate('/login');
+          navigate('/');
           window.location.reload();
         } else {
           // If admin deleted another user's account
