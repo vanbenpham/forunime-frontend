@@ -1,36 +1,76 @@
 import React, { useState } from 'react'
-import { Button, TextField, Grid, Paper, Typography, Box } from '@mui/material';
+import { Button, TextField, Grid, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import TopBar from '../../components/feature/TopBar';
 import BottomBar from '../../components/feature/BottomBar';
 import ForunimeTitle from '../../components/feature/ForunimeTitle';
 import axios from 'axios';
 
+interface UserPayload {
+    email: string;
+    username: string;
+    password: string;
+    profile_picture_url?: string; // Mark as optional with '?'
+}
+
+
 const SignUp :  React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [reEnterPassword, setReEnterPassword] = useState<string>("");
     const [username, setUsername] = useState<string>("");
+    const [profileImage, setProfileImage] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
-    const [registerSuccess, SetRegisterSuccess] = useState<boolean>(false);
+    const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
+    const cloudName = import.meta.env.VITE_CLOUD_NAME;
+    const cloudUploadPreset = import.meta.env.VITE_KEY_NAME_CLOUDINARY;
+    const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setProfileImage(e.target.files[0]);
+        }
+    };
 
     const handleSignup = async (event: React.FormEvent) => {
         event.preventDefault();
-        
+        console.log(`this is cloud name ${cloudName}`);
         try {
-            const response  = await axios.post('http://127.0.0.1:8000/users/register', {
+            let imageUrl = '';
+            if (profileImage) {
+                const formData = new FormData();
+                formData.append('file', profileImage);
+                formData.append('upload_preset', cloudUploadPreset || ''); // Replace with your Cloudinary upload preset
+        
+                const cloudinaryResponse = await axios.post(
+                    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+                    formData
+                );
+                imageUrl = cloudinaryResponse.data.secure_url;
+            }
+        
+            // Define the payload with the UserPayload type
+            const payload: UserPayload = {
                 email,
                 username,
                 password,
-            });
+            };
+        
+            // Conditionally add profile_picture_url
+            if (imageUrl) {
+                payload.profile_picture_url = imageUrl;
+            }
+        
+            const response = await axios.post(`${apiUrl}/users/register`, payload);
             setMessage(`User registered with email: ${response.data.email}`);
-            SetRegisterSuccess(true);
+            setRegisterSuccess(true);
         } catch (error) {
             console.error('Error registering user:', error);
             setMessage('Registration failed. Please try again.');
-            SetRegisterSuccess(false);
+            setRegisterSuccess(false);
         }
     };
+
     return (
         <Grid 
             container 
@@ -133,6 +173,19 @@ const SignUp :  React.FC = () => {
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </Box>
+                    <Box sx={{ marginBottom: 2 }}> {/* Space between sections */}
+                        <Typography
+                            color='white'
+                        > 
+                            Profile Image:
+                        </Typography>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            style={{ marginBottom: '16px', color: 'white' }}
+                        />
+                    </Box>
                     <Box sx={{ marginBottom: 2 }}>
                         <Typography
                             color='white'
@@ -197,10 +250,10 @@ const SignUp :  React.FC = () => {
                         SUBMIT
                     </Button>
                     <Typography
-                            color='#FF4040'
-                        > 
-                            {message}
-                        </Typography>
+                        color='#FF4040'
+                    > 
+                        {message}
+                    </Typography>
                 </Box>
                 <Box sx={{ 
                     display: 'flex', 
@@ -258,4 +311,4 @@ const SignUp :  React.FC = () => {
     )
 }
 
-export default SignUp
+export default SignUp;

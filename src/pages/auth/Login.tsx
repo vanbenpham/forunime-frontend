@@ -1,3 +1,5 @@
+//Van Ben Pham - 000872024
+
 import React, { useState } from 'react'
 import { Button, TextField, Grid, Paper, Typography, Box, AppBar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,7 +17,7 @@ const Login : React.FC = () => {
     const {user, setUser, logout} = useUser();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    
+    const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -25,7 +27,7 @@ const Login : React.FC = () => {
         formData.append('password', password);
     
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login', formData, {
+            const response = await axios.post(`${apiUrl}/login`, formData, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -57,6 +59,7 @@ const Login : React.FC = () => {
                 username: decodedToken.username,
                 profile_picture_url: decodedToken.profile_picture_url,
                 date_created: decodedToken.date_created,
+                role: decodedToken.role,
                 token,
                 exp: decodedToken.exp,  // Store the expiration time of the token
             });

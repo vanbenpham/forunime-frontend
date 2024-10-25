@@ -11,6 +11,7 @@ import Discussion from './pages/discussion/Discussion';
 import Review from './pages/review/Review';
 import Settings from './pages/settings/Settings';
 import SingleThread from './pages/discussion/SingleThread';
+import SingleDiscussion from './pages/discussion/SingleDiscussion';
 
 
 const App: React.FC = () => {
@@ -22,11 +23,13 @@ const App: React.FC = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/discussion" element={<Discussion />} />
-          <Route path="/thread/:id" element={<SingleThread />} />
+          <Route path="/thread/:threadId" element={<SingleThread />} />
+          <Route path="/singlediscussion/:postId" element={<SingleDiscussion />} />
           <Route path="/review" element={<Review />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/:userId?" element={<Settings />} />
       </Routes>
     </Router>
   );
