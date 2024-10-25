@@ -5,7 +5,6 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import ForgetPassword from './pages/auth/ForgetPassword';
 import Profile from './pages/profile/Profile';
-import LoginBar from './components/appbar/LoginBar';
 import Chat from './pages/chat/Chat';
 import Discussion from './pages/discussion/Discussion';
 import Review from './pages/review/Review';

@@ -2,7 +2,6 @@ import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Avatar, Box, Paper } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChatIcon from '@mui/icons-material/Chat';
-import ForunimeTitle from '../feature/ForunimeTitle';
 
 interface ProfileBarProps {
   username: string;

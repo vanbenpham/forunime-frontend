@@ -1,14 +1,13 @@
 //Van Ben Pham - 000872024
 
 import React, { useState } from 'react'
-import { Button, TextField, Grid, Paper, Typography, Box, AppBar } from '@mui/material';
+import { Button, TextField, Grid, Typography, Box, AppBar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import TopBar from '../../components/feature/TopBar';
 import BottomBar from '../../components/feature/BottomBar';
 import ForunimeTitle from '../../components/feature/ForunimeTitle';
 import { useUser } from '../../components/context/UserContext';
 import axios from 'axios';
-import LoginBar from '../../components/appbar/LoginBar';
 import { jwtDecode } from 'jwt-decode';
 
 const Login : React.FC = () => {

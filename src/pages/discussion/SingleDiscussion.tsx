@@ -245,7 +245,7 @@ const SingleDiscussion: React.FC = () => {
         commentData,
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
@@ -283,7 +283,7 @@ const SingleDiscussion: React.FC = () => {
 
       const response = await axios.delete(`${apiUrl}/posts/${post.post_id}`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
 
@@ -315,7 +315,7 @@ const SingleDiscussion: React.FC = () => {
         { content: editedPostContent },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
@@ -343,7 +343,7 @@ const SingleDiscussion: React.FC = () => {
     try {
       const response = await axios.delete(`${apiUrl}/comments/comment/${commentId}`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
 
@@ -378,7 +378,7 @@ const SingleDiscussion: React.FC = () => {
         { content: editedCommentContent },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
