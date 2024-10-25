@@ -1,23 +1,19 @@
-// Settings.tsx
+// src/pages/settings/Settings.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField, Collapse, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Collapse,
+  Paper,
+  Typography,
+} from '@mui/material';
 import LoginBar from '../../components/appbar/LoginBar';
-import { useUser } from '../../components/context/UserContext';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
+import { useUser } from '../../components/context/UserContext'; // Removed 'User' import
+import axios, { AxiosResponse } from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 import { USER_STORAGE_KEY } from '../../components/context/UserContext';
-
-interface User {
-  email: string;
-  user_id: number;
-  username: string;
-  profile_picture_url: string;
-  date_created: string;
-  token: string;
-  exp: number;
-  role: string;
-}
 
 const Settings: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +21,7 @@ const Settings: React.FC = () => {
   const { userId } = useParams<{ userId: string }>(); // Get userId from route parameters
 
   // Initialize state variables
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Record<string, any> | null>(null);
   const [username, setUsername] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [reNewPassword, setReNewPassword] = useState<string>('');
@@ -34,28 +30,34 @@ const Settings: React.FC = () => {
 
   const [showUpdateFields, setShowUpdateFields] = useState(false);
 
-  const cloudName = import.meta.env.VITE_CLOUD_NAME;
-  const cloudUploadPreset = import.meta.env.VITE_KEY_NAME_CLOUDINARY;
+  const cloudName = import.meta.env.VITE_CLOUD_NAME || '';
+  const cloudUploadPreset = import.meta.env.VITE_KEY_NAME_CLOUDINARY || '';
 
-  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL || '';
 
   // Fetch user data based on userId
   useEffect(() => {
     const fetchUserData = async () => {
       if (userId && currentUser) {
         // If userId is provided and currentUser is logged in
-        if (parseInt(userId) !== currentUser.user_id && currentUser.role !== 'admin') {
+        if (
+          parseInt(userId) !== currentUser.user_id &&
+          currentUser.role !== 'admin'
+        ) {
           alert('You are not authorized to access this page.');
           navigate('/'); // Redirect to home or appropriate page
           return;
         }
 
         try {
-          const response = await axios.get(`${apiUrl}/users/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${currentUser.token}`,
-            },
-          });
+          const response: AxiosResponse<Record<string, any>> = await axios.get<Record<string, any>>(
+            `${apiUrl}/users/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${currentUser.token}`,
+              },
+            }
+          );
           setUser(response.data);
           setUsername(response.data.username);
         } catch (error) {
@@ -73,14 +75,19 @@ const Settings: React.FC = () => {
     };
 
     fetchUserData();
-  }, [userId, currentUser, navigate]);
+  }, [userId, currentUser, navigate, apiUrl]);
 
   // Handle case when user data is not available yet
   if (!user) {
     return (
       <Box display="flex" flexDirection="column" height="100vh">
         <LoginBar pageTitle="SETTINGS" />
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Typography variant="h6">Loading user data...</Typography>
         </Box>
       </Box>
@@ -94,27 +101,27 @@ const Settings: React.FC = () => {
   const handleLogout = () => {
     try {
       console.log('Logging out...');
-      
+
       // Clear user context (set user to null)
       logout();
-  
+
       // Remove user data and token from local storage
       localStorage.removeItem(USER_STORAGE_KEY);
       localStorage.removeItem('token');
-  
+
       // Optional: Clear other sensitive data if necessary
-      sessionStorage.clear();  // If you use session storage elsewhere in the app
-  
+      sessionStorage.clear(); // If you use session storage elsewhere in the app
+
       // Navigate to the login page
       navigate('/login');
-      
+
       // Optionally, refresh the page to clear any lingering state
-      window.location.reload();  // Forces a reload to clear any remaining user state
+      window.location.reload(); // Forces a reload to clear any remaining user state
     } catch (error) {
       console.error('Error during logout:', error);
       alert('There was an error while logging out. Please try again.');
     }
-  };  
+  };
 
   const handleDeleteAccount = async () => {
     const confirmation = window.confirm(
@@ -125,11 +132,14 @@ const Settings: React.FC = () => {
     try {
       console.log('Attempting to delete account...');
 
-      const response = await axios.delete(`${apiUrl}/users/${user.user_id}`, {
-        headers: {
-          Authorization: `Bearer ${currentUser!.token}`,
-        },
-      });
+      const response: AxiosResponse = await axios.delete(
+        `${apiUrl}/users/${user.user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${currentUser!.token}`,
+          },
+        }
+      );
 
       if (response.status === 204) {
         alert('Account deleted successfully.');
@@ -150,10 +160,17 @@ const Settings: React.FC = () => {
     } catch (error: any) {
       if (error.response) {
         console.error('Error response from server:', error.response.data);
-        alert(`Error: ${error.response.data.detail || 'An error occurred while deleting the account.'}`);
+        alert(
+          `Error: ${
+            error.response.data.detail ||
+            'An error occurred while deleting the account.'
+          }`
+        );
       } else {
         console.error('Delete account error:', error);
-        alert('An error occurred while trying to delete the account. Please try again later.');
+        alert(
+          'An error occurred while trying to delete the account. Please try again later.'
+        );
       }
     }
   };
@@ -179,17 +196,19 @@ const Settings: React.FC = () => {
 
     // Ensure that at least one field has been changed
     if (!username && !newPassword && !profileImage) {
-      alert('No changes detected. Please update your username, password, or profile picture.');
+      alert(
+        'No changes detected. Please update your username, password, or profile picture.'
+      );
       return;
     }
 
     // Prepare the request payload, only including fields that are being updated
-    const updateData: { 
-      email?: string; 
-      username?: string; 
-      password?: string; 
-      current_password: string; 
-      profile_picture_url?: string 
+    const updateData: {
+      email?: string;
+      username?: string;
+      password?: string;
+      current_password: string;
+      profile_picture_url?: string;
     } = {
       current_password: currentPassword,
     };
@@ -208,12 +227,13 @@ const Settings: React.FC = () => {
       try {
         const formDataImage = new FormData();
         formDataImage.append('file', profileImage);
-        formDataImage.append('upload_preset', cloudUploadPreset || '');
+        formDataImage.append('upload_preset', cloudUploadPreset);
 
-        const cloudinaryResponse = await axios.post(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          formDataImage
-        );
+        const cloudinaryResponse: AxiosResponse<{ secure_url: string }> =
+          await axios.post(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            formDataImage
+          );
         imageUrl = cloudinaryResponse.data.secure_url;
         updateData.profile_picture_url = imageUrl;
       } catch (imageUploadError) {
@@ -227,7 +247,9 @@ const Settings: React.FC = () => {
       console.log('Submitting updated user data...', updateData);
 
       // Send PUT request to update the user info
-      const response = await axios.put(
+      const response: AxiosResponse<Record<string, any>> = await axios.put<
+        Record<string, any>
+      >(
         `${apiUrl}/users/${user.user_id}`,
         updateData,
         {
@@ -244,12 +266,20 @@ const Settings: React.FC = () => {
         // Update the user context with the new data
         if (currentUser!.user_id === user.user_id) {
           // If the current user updated their own account
-          setCurrentUser((prevUser) => ({
-            ...prevUser!,
-            username: updateData.username || prevUser!.username,
-            profile_picture_url: updateData.profile_picture_url || prevUser!.profile_picture_url,
-          }));
+          setCurrentUser((prevUser: Record<string, any> | null) => {
+            if (!prevUser) return null; // Safety check
+
+            return {
+              ...prevUser,
+              username: updateData.username || prevUser.username,
+              profile_picture_url:
+                updateData.profile_picture_url ||
+                prevUser.profile_picture_url,
+            };
+          });
         }
+
+        setUser(response.data); // Update the local user state with the updated data
 
         alert('User information updated successfully!');
       } else {
@@ -257,21 +287,33 @@ const Settings: React.FC = () => {
       }
     } catch (error: any) {
       if (error.response) {
-        alert(`Update failed: ${error.response.data.detail || 'Unknown error occurred.'}`);
+        alert(
+          `Update failed: ${
+            error.response.data.detail || 'Unknown error occurred.'
+          }`
+        );
       } else {
         console.error('Update error', error);
-        alert('An error occurred while updating your information. Please try again later.');
+        alert(
+          'An error occurred while updating your information. Please try again later.'
+        );
       }
     }
   };
 
-  // Determine if the current user is viewing their own settings page
-  const isOwnSettingsPage = currentUser!.user_id === user.user_id;
+  // Safely determine if the current user is viewing their own settings page
+  const isOwnSettingsPage =
+    currentUser && currentUser.user_id === user.user_id;
 
   return (
     <Box display="flex" flexDirection="column" height="100vh">
       <LoginBar pageTitle="SETTINGS" />
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Box
           component={Paper}
           sx={{
@@ -291,7 +333,11 @@ const Settings: React.FC = () => {
               <Button
                 variant="contained"
                 onClick={handleUpdateClick}
-                sx={{ width: '25%', backgroundColor: 'rgba(229, 225, 210, 0.4)', color: 'black' }}
+                sx={{
+                  width: '25%',
+                  backgroundColor: 'rgba(229, 225, 210, 0.4)',
+                  color: 'black',
+                }}
               >
                 Update User Information
               </Button>
@@ -334,7 +380,13 @@ const Settings: React.FC = () => {
                     onChange={(e) => setReNewPassword(e.target.value)}
                   />
 
-                  <Box sx={{ marginBottom: 2, width: '90%', textAlign: 'left' }}>
+                  <Box
+                    sx={{
+                      marginBottom: 2,
+                      width: '90%',
+                      textAlign: 'left',
+                    }}
+                  >
                     <Typography>Profile Image:</Typography>
                     <input
                       type="file"
@@ -378,14 +430,20 @@ const Settings: React.FC = () => {
                 <Button
                   variant="contained"
                   onClick={handleLogout}
-                  sx={{ width: '25%', backgroundColor: 'rgba(223, 101, 92, 0.7)' }}
+                  sx={{
+                    width: '25%',
+                    backgroundColor: 'rgba(223, 101, 92, 0.7)',
+                  }}
                 >
                   Log Out
                 </Button>
                 <Button
                   variant="contained"
                   onClick={handleDeleteAccount}
-                  sx={{ width: '25%', backgroundColor: 'rgba(223, 101, 92, 0.7)' }}
+                  sx={{
+                    width: '25%',
+                    backgroundColor: 'rgba(223, 101, 92, 0.7)',
+                  }}
                 >
                   Delete Account
                 </Button>
@@ -408,7 +466,10 @@ const Settings: React.FC = () => {
               <Button
                 variant="contained"
                 onClick={handleDeleteAccount}
-                sx={{ width: '25%', backgroundColor: 'rgba(223, 101, 92, 0.7)' }}
+                sx={{
+                  width: '25%',
+                  backgroundColor: 'rgba(223, 101, 92, 0.7)',
+                }}
               >
                 Delete Account
               </Button>

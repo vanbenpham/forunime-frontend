@@ -13,10 +13,8 @@ import {
     Button,
     CircularProgress,
     IconButton,
-    Avatar,
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { useUser } from '../../components/context/UserContext';
 import PostList from '../../components/feature/PostList';
 import axios from 'axios';
 
@@ -59,7 +57,7 @@ const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Extract profile ID from the URL
     const visitedProfileId = parseInt(id as string, 10); // Parse `id` from params to number
 
-    const { user } = useUser() as { user: UserType | null };
+    // const { user } = useUser() as { user: UserType | null };
 
     const [profileUser, setProfileUser] = useState<UserType | null>(null); // State for storing visited profile data
     const [loading, setLoading] = useState<boolean>(true); // State to manage loading
@@ -344,7 +342,7 @@ const Profile: React.FC = () => {
     };
 
     // Extract current user's ID
-    const current_user_id = user?.user_id;
+    // const current_user_id = user?.user_id;
 
     if (loading) {
         return (

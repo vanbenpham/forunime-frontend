@@ -14,6 +14,7 @@ import {
   Pagination,
   Button,
   Modal,
+  SelectChangeEvent,
 } from '@mui/material';
 import React, { useEffect, useState, useMemo } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -154,6 +155,7 @@ const SingleDiscussion: React.FC = () => {
       return;
     }
     const fetchComments = async () => {
+      console.log(isEditingPost,isEditingComment);
       try {
         if (!postId) {
           setCommentsError('Post ID not found in URL.');
@@ -208,15 +210,19 @@ const SingleDiscussion: React.FC = () => {
   }, [currentPage, commentsPerPage, filteredComments]);
 
   // Handle page change
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
   // Handle comments per page change
-  const handleCommentsPerPageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCommentsPerPage(event.target.value as number);
+  const handleCommentsPerPageChange = (
+    event: SelectChangeEvent<number>,
+    _child: React.ReactNode
+  ) => {
+    setCommentsPerPage(Number(event.target.value));
     setCurrentPage(1); // Reset to first page
   };
+  
 
   // Handle reply icon click
   const handleReplyClick = (comment: Comment) => {

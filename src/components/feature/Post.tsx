@@ -73,7 +73,6 @@ const Post: React.FC<PostProps> = (props) => {
   // Cloudinary environment variables
   const cloudName = import.meta.env.VITE_CLOUD_NAME;
   const cloudUploadPreset = import.meta.env.VITE_KEY_NAME_CLOUDINARY;
-  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
   if (isPost) {
     const item = props.post;

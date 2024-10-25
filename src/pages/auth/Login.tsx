@@ -13,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 const Login : React.FC = () => {
     const navigate = useNavigate();
 
-    const {user, setUser, logout} = useUser();
+    const {setUser} = useUser();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;

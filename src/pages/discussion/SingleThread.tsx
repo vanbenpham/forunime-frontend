@@ -14,6 +14,7 @@ import {
   Pagination,
   Modal,
   Button,
+  SelectChangeEvent
 } from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -22,6 +23,7 @@ import LoginBar from '../../components/appbar/LoginBar';
 import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
 import { useUser } from '../../components/context/UserContext';
 import axios from 'axios';
+
 
 // Define the types based on your API response
 interface User {
@@ -143,15 +145,19 @@ const SingleThread = () => {
   }, [currentPage, postsPerPage, filteredPosts]);
 
   // Handle page change
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
   // Handle posts per page change
-  const handlePostsPerPageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPostsPerPage(event.target.value as number);
+  const handlePostsPerPageChange = (
+    event: SelectChangeEvent<number>,
+    _child?: React.ReactNode
+  ) => {
+    setPostsPerPage(Number(event.target.value));
     setCurrentPage(1); // Reset to first page
   };
+  
 
   // Handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +186,7 @@ const SingleThread = () => {
         postData.thread_id = thread_id;
       } else {
         // If thread_id is null, you might include profile_user_id or handle accordingly
-        postData.profile_user_id = user.user_id;
+        postData.profile_user_id = user?.user_id;
       }
 
       const response = await axios.post(

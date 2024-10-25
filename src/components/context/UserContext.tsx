@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
+import { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 
 interface UserContextType {
   user: Record<string, any> | null;  // User object with dynamic fields
