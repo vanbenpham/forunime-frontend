@@ -101,7 +101,7 @@ const SingleDiscussion: React.FC = () => {
           return;
         }
 
-        const response = await axios.get<Post>(`http://localhost:8000/posts/${postId}`, {
+        const response = await axios.get<Post>(`${apiUrl}/posts/${postId}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
