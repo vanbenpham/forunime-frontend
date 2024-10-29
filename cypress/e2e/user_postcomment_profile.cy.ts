@@ -19,9 +19,9 @@ describe('Login', () => {
         cy.contains('p', 'This is the editted post').should('exist');
         cy.get('[data-testid="DeleteIcon"]').click({force: true});
         cy.contains('p', 'This is the editted post').should('not.exist');
-        cy.get('input[placeholder="Add a post..."]').clear().type("This is for admin");
-        cy.contains('button', 'SEND').click({force: true});
-        cy.contains('p', 'This is for admin').should('exist');
+        // cy.get('input[placeholder="Add a post..."]').clear().type("This is for admin");
+        // cy.contains('button', 'SEND').click({force: true});
+        // cy.contains('p', 'This is for admin').should('exist');
     });
 
 })

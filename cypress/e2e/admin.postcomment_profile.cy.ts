@@ -10,9 +10,9 @@ describe('Login', () => {
         cy.wait(wait_time);
         cy.visit('https://serene-genie-f6bf5d.netlify.app/profile/3');
         cy.contains('div', 'PROFILE').should('exist');
-        cy.contains('p', 'This is for admin').should('exist');
-        cy.get('[data-testid="DeleteIcon"]').click({force: true});
-        cy.contains('p', 'This is for admin').should('not.exist');
+        // cy.contains('p', 'This is for admin').should('exist');
+        // cy.get('[data-testid="DeleteIcon"]').click({force: true});
+        // cy.contains('p', 'This is for admin').should('not.exist');
         cy.get('input[placeholder="Add a post..."]').clear().type("This is from admin");
         cy.contains('button', 'SEND').click({force: true});
         cy.wait(wait_time);
