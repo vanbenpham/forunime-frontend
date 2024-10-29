@@ -17,7 +17,6 @@ interface UserType {
   username: string;
   date_created: string;
   profile_picture_url: string;
-  role: string; // Added role property
 }
 
 interface CommentType {
@@ -38,7 +37,7 @@ interface PostType {
   date_created: string;
   user: UserType;
   profile_user_id?: number;
-  thread_id?: number | null;
+  thread_id?: number | null; // Added thread_id field
   comments: CommentType[];
 }
 
@@ -68,7 +67,7 @@ type PostProps =
 const Post: React.FC<PostProps> = (props) => {
   const { isPost, editItem, deleteItem, onReply, editingItemId, setEditingItemId } = props;
 
-  const { user: currentUser } = useUser() as { user: { user_id: number; role: string } | null };
+  const { user: currentUser } = useUser() as { user: { user_id: number } | null };
   const currentUserId = currentUser?.user_id;
 
   // Cloudinary environment variables
@@ -82,7 +81,7 @@ const Post: React.FC<PostProps> = (props) => {
     const [editedContent, setEditedContent] = useState(item.content);
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
-    const [replyImage, setReplyImage] = useState<File | null>(null);
+    const [replyImage, setReplyImage] = useState<File | null>(null); // State for reply image
     const isEditing = editingItemId === item.post_id;
 
     useEffect(() => {
@@ -96,7 +95,6 @@ const Post: React.FC<PostProps> = (props) => {
     const handleSave = () => {
       if (editedContent.trim()) {
         editItem(item.post_id, editedContent, true);
-        setEditingItemId(null);
       } else {
         alert('Content cannot be empty');
       }
@@ -119,7 +117,7 @@ const Post: React.FC<PostProps> = (props) => {
             imageUrl = cloudinaryResponse.data.secure_url;
           }
 
-          await onReply(item.post_id, replyContent, true, imageUrl || undefined);
+          await onReply(item.post_id, replyContent, true, imageUrl || undefined); // isPost is true
 
           setReplyContent('');
           setReplyImage(null);
@@ -161,7 +159,6 @@ const Post: React.FC<PostProps> = (props) => {
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
                 sx={{ mb: 1 }}
-                multiline
               />
             ) : (
               <>
@@ -201,8 +198,8 @@ const Post: React.FC<PostProps> = (props) => {
               </>
             ) : (
               <>
-                {/* Show edit/delete buttons if the current user is the owner or an admin */}
-                {(currentUserId === item.user.user_id || currentUser?.role === 'admin') && (
+                {/* Only show edit/delete buttons if the current user is the owner */}
+                {currentUserId === item.user.user_id && (
                   <>
                     <IconButton
                       onClick={() => setEditingItemId(item.post_id)}
@@ -275,7 +272,7 @@ const Post: React.FC<PostProps> = (props) => {
         {isPost && item.comments && item.comments.length > 0 && (
           <Box mt={1} ml={5}>
             {item.comments
-              .filter((comment) => !comment.parent_comment_id)
+              .filter((comment) => !comment.parent_comment_id) // Only top-level comments
               .map((comment) => (
                 <Post
                   key={comment.comment_id}
@@ -300,7 +297,7 @@ const Post: React.FC<PostProps> = (props) => {
     const [editedContent, setEditedContent] = useState(item.content);
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
-    const [replyImage, setReplyImage] = useState<File | null>(null);
+    const [replyImage, setReplyImage] = useState<File | null>(null); // State for reply image
     const isEditing = editingItemId === item.comment_id;
 
     useEffect(() => {
@@ -314,7 +311,6 @@ const Post: React.FC<PostProps> = (props) => {
     const handleSave = () => {
       if (editedContent.trim()) {
         editItem(item.comment_id, editedContent, false);
-        setEditingItemId(null);
       } else {
         alert('Content cannot be empty');
       }
@@ -337,7 +333,7 @@ const Post: React.FC<PostProps> = (props) => {
             imageUrl = cloudinaryResponse.data.secure_url;
           }
 
-          await onReply(item.comment_id, replyContent, false, imageUrl || undefined);
+          await onReply(item.comment_id, replyContent, false, imageUrl || undefined); // isPost is false
 
           setReplyContent('');
           setReplyImage(null);
@@ -379,7 +375,6 @@ const Post: React.FC<PostProps> = (props) => {
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
                 sx={{ mb: 1 }}
-                multiline
               />
             ) : (
               <>
@@ -419,8 +414,8 @@ const Post: React.FC<PostProps> = (props) => {
               </>
             ) : (
               <>
-                {/* Show edit/delete buttons if the current user is the owner or an admin */}
-                {(currentUserId === item.user.user_id || currentUser?.role === 'admin') && (
+                {/* Only show edit/delete buttons if the current user is the owner */}
+                {currentUserId === item.user.user_id && (
                   <>
                     <IconButton
                       onClick={() => setEditingItemId(item.comment_id)}
@@ -438,7 +433,6 @@ const Post: React.FC<PostProps> = (props) => {
                     </IconButton>
                   </>
                 )}
-                {/* Reply Button */}
                 <IconButton
                   onClick={() => setIsReplying(!isReplying)}
                   size="small"

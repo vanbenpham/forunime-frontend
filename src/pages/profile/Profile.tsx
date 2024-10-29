@@ -25,7 +25,6 @@ interface UserType {
     username: string;
     date_created: string;
     profile_picture_url: string;
-    role: string;
 }
 
 // Define the comment type
