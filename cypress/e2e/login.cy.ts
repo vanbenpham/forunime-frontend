@@ -1,40 +1,36 @@
-describe('Login API Test', () => {
-    beforeEach(() => {
-        // Visit the signup page before each test
-        cy.visit('http://localhost:5173/'); // Adjust the URL as necessary
-      });
-    
-    it('should successfully log in the user and redirect to profile page', () => {
+const wait_time = 2000
+const url_login = Cypress.env('CYPRESS_URL');
+const username_admin = Cypress.env('CYPRESS_USERNAME_ADMIN');
+const password_admin = Cypress.env('CYPRESS_PASSWORD_ADMIN');
+const username_user = Cypress.env('CYPRESS_USERNAME_USER');
+const password_user = Cypress.env('CYPRESS_PASSWORD_USER');
 
-        // Mock the API response for a successful login
-        cy.intercept('POST', 'http://127.0.0.1:8000/login', {
-            statusCode: 200,
-            body: {
-                access_token: 'fake-jwt-token',
-            },
-        }).as('loginRequest');
-
-        // Fill in the email and password
-        cy.get('input[name="email"]').type('testuser@example.com');
-        cy.get('input[name="password"]').type('password123');
-
-        // Submit the form
-        cy.get('button[type="submit"]').click();
-
-        // Wait for the API request to be made and check the response
-        cy.wait('@loginRequest').then((interception) => {
-            // Assert that the request body contains the correct data
-            expect(interception.request.body.get('username')).to.equal('testuser@example.com');
-            expect(interception.request.body.get('password')).to.equal('password123');
-        });
-
-        // Check if the token is stored in localStorage
-        cy.window().then((window) => {
-            const token = window.localStorage.getItem('token');
-            expect(token).to.equal('fake-jwt-token');
-        });
-
-        // Verify redirection to the profile page after successful login
-        cy.url().should('include', '/profile/fake-user-id');  // Change fake-user-id with the actual id expected
+describe('Login', () => { 
+    it('Login and Log Out User', () => {
+        // login
+        cy.visit(url_login)
+        cy.get('input[name="email"]').clear().type(username_user);
+        cy.get('input[name="password"]').clear().type(password_user);
+        cy.contains('button', 'SUBMIT').click({force: true});
+        cy.wait(wait_time);
+        cy.contains('div', 'PROFILE').should('exist');
+        cy.get('[data-testid="MenuIcon"]').click({force:true});
+        cy.contains('li','Settings').click({force: true});
+        cy.contains('button', 'Log Out').click({force:true});
+        cy.visit(url_login)
     });
-});
+
+    it('Login and Log Out Admin', () => {
+        // login
+        cy.visit(url_login)
+        cy.get('input[name="email"]').clear().type(username_admin);
+        cy.get('input[name="password"]').clear().type(password_admin);
+        cy.contains('button', 'SUBMIT').click({force: true});
+        cy.wait(wait_time);
+        cy.contains('div', 'PROFILE').should('exist');
+        cy.get('[data-testid="MenuIcon"]').click({force:true});
+        cy.contains('li','Settings').click({force: true});
+        cy.contains('button', 'Log Out').click({force:true});
+        cy.visit(url_login)
+    });
+})
