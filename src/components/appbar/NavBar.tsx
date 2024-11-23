@@ -48,7 +48,7 @@ const NavBar: React.FC<NavBarProps> = ({ open, anchorRef, onClose }) => {
                   <MenuList autoFocusItem={open} id="composition-menu" aria-labelledby="composition-button" onKeyDown={handleListKeyDown}>
                     <MenuItem onClick={() => handleMenuItemClick(`/profile/${user.user_id}`)}>Profile</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick(`/settings/${user.user_id}`)}>Settings</MenuItem>
-                    <MenuItem onClick={() => handleMenuItemClick('/reviews')}>Review</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('/review')}>Review</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('/discussion')}>Discussion</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('/chat')}>Chat</MenuItem>
                   </MenuList>

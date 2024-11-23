@@ -11,6 +11,7 @@ import Review from './pages/review/Review';
 import Settings from './pages/settings/Settings';
 import SingleThread from './pages/discussion/SingleThread';
 import SingleDiscussion from './pages/discussion/SingleDiscussion';
+import SingleReview from './pages/review/SingleReview';
 
 
 const App: React.FC = () => {
@@ -28,7 +29,9 @@ const App: React.FC = () => {
           <Route path="/thread/:threadId" element={<SingleThread />} />
           <Route path="/singlediscussion/:postId" element={<SingleDiscussion />} />
           <Route path="/review" element={<Review />} />
+          <Route path="/review/:reviewId" element={<SingleReview />} />
           <Route path="/settings/:userId?" element={<Settings />} />
+
       </Routes>
     </Router>
   );
