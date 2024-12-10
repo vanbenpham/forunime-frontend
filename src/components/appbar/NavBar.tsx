@@ -50,7 +50,7 @@ const NavBar: React.FC<NavBarProps> = ({ open, anchorRef, onClose }) => {
                     <MenuItem onClick={() => handleMenuItemClick(`/settings/${user.user_id}`)}>Settings</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('/review')}>Review</MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('/discussion')}>Discussion</MenuItem>
-                    <MenuItem onClick={() => handleMenuItemClick('/chat')}>Chat</MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('/message')}>Message</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

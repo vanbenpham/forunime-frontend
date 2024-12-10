@@ -5,7 +5,7 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import ForgetPassword from './pages/auth/ForgetPassword';
 import Profile from './pages/profile/Profile';
-import Chat from './pages/chat/Chat';
+import Message from './pages/message/Message';
 import Discussion from './pages/discussion/Discussion';
 import Review from './pages/review/Review';
 import Settings from './pages/settings/Settings';
@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/message" element={<Message />} />
           <Route path="/discussion" element={<Discussion />} />
           <Route path="/thread/:threadId" element={<SingleThread />} />
           <Route path="/singlediscussion/:postId" element={<SingleDiscussion />} />
