@@ -155,7 +155,9 @@ const SingleDiscussion: React.FC = () => {
       return;
     }
     const fetchComments = async () => {
+      console.log("This is post id" + postId);
       console.log(isEditingPost,isEditingComment);
+
       try {
         if (!postId) {
           setCommentsError('Post ID not found in URL.');
@@ -163,7 +165,7 @@ const SingleDiscussion: React.FC = () => {
           return;
         }
 
-        const response = await axios.get<Comment[]>(`${apiUrl}/comments/${postId}`, {
+        const response = await axios.get<Comment[]>(`${apiUrl}/comments/posts/${postId}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

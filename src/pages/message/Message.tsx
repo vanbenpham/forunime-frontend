@@ -1525,7 +1525,7 @@ const MessageBubble = styled(Box)<{ isOwner: boolean }>(({ theme, isOwner }) => 
   },
 }));
 
-const ActionIcons = styled(Box)(({ theme }) => ({
+const ActionIcons = styled(Box)(() => ({
   position: 'absolute',
   top: '5px',
   right: '5px',
@@ -1554,7 +1554,7 @@ const MessagePage: React.FC = () => {
   const [searchedUsers, setSearchedUsers] = useState<User[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
 
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [_,setWs] = useState<WebSocket | null>(null);
   const apiUrl = import.meta.env.VITE_REACT_APP_API_URL || 'http://127.0.0.1:8000';
   const wsUrl = apiUrl.replace(/^http/, 'ws') + `/messages/ws/messages/${user?.user_id}`;
   const currentUserId = user?.user_id;
